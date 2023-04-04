@@ -1,9 +1,9 @@
 # table mesh issue:
 
 print outputs:
-table1 mesh top:  0.0
-table1 mesh center:  <bound method PyCapsule.center of Range({0, 0, 0}, {0, 0, 0})>
-table1 mesh_bb:  Range({0, 0, 0}, {0, 0, 0})
+- table1 mesh top:  0.0
+- table1 mesh center:  <bound method PyCapsule.center of Range({0, 0, 0}, {0, 0, 0})>
+- table1 mesh_bb:  Range({0, 0, 0}, {0, 0, 0})
 
 
 # Solved: deletion issue 
