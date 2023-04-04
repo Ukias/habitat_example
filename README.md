@@ -8,6 +8,10 @@ print outputs in constructor of class `HabitatSimulator` in `src/simulator.py`:
 - table1 mesh center:  <bound method PyCapsule.center of Range({0, 0, 0}, {0, 0, 0})>
 - table1 mesh_bb:  Range({0, 0, 0}, {0, 0, 0})
 
+Images are saved to folder output/banana. 
+
+![image](output/banana/banana_front.png)
+
 Objects are from the YCB dataset and the apartment scene is from the replicaCAD dataset.
 
 # Solved: deletion issue 
