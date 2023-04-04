@@ -12,6 +12,8 @@ class ClutterLoader:
             tableScaleJsonPath += "/largeTableScale.json"
         elif args.tbsz == "tbMed":
             tableScaleJsonPath += "/mediumTableScale.json"
+        elif args.tbsz == "tbOpt":
+            tableScaleJsonPath += "/optTableScale.json"            
         f = open(tableScaleJsonPath, "r")        
         jsonDump = f.read()  
         scales = json.loads(jsonDump)              
@@ -23,10 +25,17 @@ class ClutterLoader:
     def loadSingleBanana(self, habSim):
         assert isinstance(habSim.sim, habitat_sim.Simulator)      
         t = mn.Vector3(self.tblMidPos[0], 1, self.tblMidPos[2])          
-        habSim.addYcbObjOnTbl("banana", t)
-        habSim.sim.agents[0].scene_node.translation = t
-        habSim.sim.agents[0].scene_node.translate(mn.Vector3(0,1,-0.5))
-        habSim.sim.agents[0].scene_node.rotation = mn.Quaternion.from_matrix(habSim.sim.agents[0].scene_node.rotation.normalized().to_matrix() @ rot_3d_x(np.pi/2))        
-        habSim.save_as_image(habSim.sim.get_sensor_observations(), "banana", "banana/",True)  
+        habSim.addYcbObjOnTbl("banana", t)        
+        habSim.saveCurObsv("banana", "banana/")  
         habSim.deleteObjectsOnTable()
-        habSim.save_as_image(habSim.sim.get_sensor_observations(), "tbAftDel", "banana/",True)         
+        habSim.saveCurObsv("tbAftDel", "banana/")         
+    
+    def load2Objs(self, habSim):
+        assert isinstance(habSim.sim, habitat_sim.Simulator)      
+        t = mn.Vector3(self.tblMidPos[0], 1, self.tblMidPos[2])   
+        habSim.addYcbObjOnTbl("banana", t)
+        t = mn.Vector3(self.tblMidPos[0], 1, self.tblMidPos[2] + 0.2)   
+        habSim.addYcbObjOnTbl("cracker_box", t)
+        habSim.saveCurObsv("banCb", "banCb/")          
+        habSim.deleteObjectsOnTable()
+        habSim.saveCurObsv("tbAftDel", "banCb/")         
