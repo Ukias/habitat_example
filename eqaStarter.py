@@ -12,10 +12,10 @@ def initializeArgumentParser(data_path):
         choices=['simTest'])     
     
     #scene configuration
-    parser.add_argument('-tbsz', default='tbMed', type=str,choices=['tbLg','tbMed'])
+    parser.add_argument('-tbsz', default='tbMed', type=str,choices=['tbLg','tbMed', 'tbOpt'])
     
     #image saving
-    parser.add_argument('-firstPerson', default=False, type=bool)
+    parser.add_argument('-camPspv', default='front', choices=['brd', 'front'])    
     return(parser)    
 
 if __name__ == '__main__':
