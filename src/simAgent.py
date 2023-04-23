@@ -2,7 +2,7 @@ from src.utils.util import *
 import json
 
 class SimAgent:	
-    def __init__(self, habSim, args):        
+    def __init__(self, habSim, args, height):
         self.habSim = habSim  
         tableScaleJsonPath = habSim.data_path
         if args.tbsz == "tbLg":
@@ -23,5 +23,6 @@ class SimAgent:
         elif args.camPspv == 'front':
             tblMidPos = mn.Vector3(tblMidPos[0], tblMidPos[1], tblMidPos[2])
             self.habSim.sim.agents[0].scene_node.translation = tblMidPos + mn.Vector3(-0.5,0,-2)
+            self.habSim.sim.agents[0].scene_node.translation[1] = height
             self.habSim.sim.agents[0].scene_node.rotation = self.initRot
         

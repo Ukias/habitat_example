@@ -22,13 +22,19 @@ class ClutterLoader:
         self.tblMidPos = scales["tableMidPosition"]    
         f.close()             
         
-    def loadSingleBanana(self, habSim):
+    def loadSingleBanana(self, habSim, trnslTble):
+        '''
+        :param habSim: src.simulator.Simulator
+        :param trnslTble: (3,) np.ndarray
+        :return: None
+        '''
         assert isinstance(habSim.sim, habitat_sim.Simulator)      
-        t = mn.Vector3(self.tblMidPos[0], 1, self.tblMidPos[2])          
+        #t = mn.Vector3(self.tblMidPos[0], 1, self.tblMidPos[2]) #manually
+        t = mn.Vector3(trnslTble[0], 0.8, trnslTble[2])
         habSim.addYcbObjOnTbl("banana", t)        
-        habSim.saveCurObsv("banana", "banana/")  
-        habSim.deleteObjectsOnTable()
-        habSim.saveCurObsv("tbAftDel", "banana/")         
+        #habSim.saveCurObsv("banana", "banana/")
+        #habSim.deleteObjectsOnTable()
+        #habSim.saveCurObsv("tbAftDel", "banana/")
     
     def load2Objs(self, habSim):
         assert isinstance(habSim.sim, habitat_sim.Simulator)      

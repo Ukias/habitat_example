@@ -22,9 +22,12 @@ class HabitatSimulator:
 
         with habitat_sim.Simulator(hab_cfg) as sim:
             self.sim = sim
-            self.simAgent = SimAgent(self, args)
             # get the rigid object manager
-            rigid_obj_mgr = self.sim.get_rigid_object_manager()            
+            rigid_obj_mgr = self.sim.get_rigid_object_manager()
+            trnslTble = np.array(rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.absolute_transformation()[3])[:3]
+            cumBB = rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.cumulative_bb
+            height = trnslTble[1] + cumBB.max[1]
+            self.simAgent = SimAgent(self, args, height)
 			#load the full YCB dataset into the MetadataMediator
             sim.metadata_mediator.active_dataset = self.data_path + "hab_ycb_v1.2/ycb.scene_dataset_config.json"		
 		
@@ -35,8 +38,33 @@ class HabitatSimulator:
                 print("object handles: ",rigid_obj_mgr.get_object_handles())				
                 print("table1 mesh top: ",rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.mesh_bb.top)
                 print("table1 mesh center: ",rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.mesh_bb.center)
-                print("table1 mesh_bb: ",rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.mesh_bb)	
-                self.loadSingleBanana()
+                print("table1 mesh_bb: ",rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.mesh_bb)
+                print("table1 abs trfm: ",rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.absolute_transformation())
+                trnslTble = np.array(rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.absolute_transformation()[3])[:3]
+                print("table1 abs trnsl: ",trnslTble)
+                cumBB = rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.cumulative_bb
+                print("table1 cum.bb: ",cumBB)
+                scl = rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.scaling
+                print("table1 scaling: ",scl)
+                parent = rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.parent
+                print("table1 parent trnsl: ",parent.translation)
+                #rigid_obj_mgr.get_object_by_handle("frl_apartment_table_01_:0000").root_scene_node.scaling = mn.Vector3(1.5,1.5,1.5)
+                print("table1 cumBB max: ", cumBB.max)
+                trnslTble[1] += cumBB.max[1]
+                self.loadSingleBanana(trnslTble)
+                trnslTble[0] += cumBB.max[2]
+                self.loadSingleBanana(trnslTble)
+                trnslTble[2] += cumBB.max[0]
+                self.loadSingleBanana(trnslTble)
+                trnslTble[0] -= 2 * cumBB.max[2]
+                self.loadSingleBanana(trnslTble)
+                trnslTble[2] -= 2 * cumBB.max[0]
+                self.loadSingleBanana(trnslTble)
+                trnslTble[0] += 2 * cumBB.max[2]
+                self.loadSingleBanana(trnslTble)
+                self.saveCurObsv("5bananas","banana/")
+                self.deleteObjectsOnTable()
+                self.saveCurObsv("3bananasDeleted,","banana/")
                 
     def save_as_image(self,observation, filename, foldername="", outputFolder=True):
         if outputFolder == True and not os.path.exists(self.output_path + foldername):
@@ -88,7 +116,7 @@ class HabitatSimulator:
         obj.collidable = True
         obj.motion_type = habitat_sim.physics.MotionType.KINEMATIC                   
             
-    def loadSingleBanana(self):                  
-        self.clutterLoader.loadSingleBanana(self)
+    def loadSingleBanana(self, trnslTble):
+        self.clutterLoader.loadSingleBanana(self, trnslTble)
     def load2Objs(self):                                            
         self.clutterLoader.load2Objs(self)                
