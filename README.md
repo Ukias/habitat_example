@@ -1,4 +1,4 @@
-# table mesh issue:
+# table mesh issue (solved):
 
 Banana has to be placed exactly on table1. Table is placed in the scene but outputs of table1 mesh center and mesh_top are wrong:
 
@@ -12,6 +12,8 @@ Objects are from the YCB dataset and the apartment scene is from the replicaCAD 
 Images are saved to folder output/banana. 
 
 ![image](output/banana/banana_front.png)
+
+Solution: Add the maximum of ``root_scene_node.cumulative__bb`` to the translation of the ``root_scene_node`` as shown in ``simulator.py`` in the constructor of class ``Simulator``.
 
 
 # Solved: deletion issue 
